@@ -27,7 +27,8 @@ jobs:
         uses: oven-sh/setup-bun@v2
 
       - name: Download Open Grind
-        run: | git clone --recurse-submodules git.opengrind.org/open-grind/open-grind.git
+        run: git clone --recurse-submodules "https://git.opengrind.org/open-grind/open-grind.git"
+
       - name: Build IPA
         working-directory: open-grind
         run: bun run package:ios
@@ -36,5 +37,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Open-Grind-iOS
-          path: open-grind/src-tauri/target/release/artifacts/*.ipa
+          path: open-grind/**/*.ipa
           if-no-files-found: error
