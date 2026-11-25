@@ -27,8 +27,7 @@ jobs:
         uses: oven-sh/setup-bun@v2
 
       - name: Download Open Grind
-        run: |
-git clone --recurse-submodules git.opengrind.org/open-grind/open-grind.git
+        run: | git clone --recurse-submodules git.opengrind.org/open-grind/open-grind.git
       - name: Build IPA
         working-directory: open-grind
         run: bun run package:ios
