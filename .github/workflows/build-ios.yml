@@ -1,0 +1,42 @@
+name: Build Open Grind iOS
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: xcode-27
+    timeout-minutes: 180
+
+    steps:
+      - name: Select Xcode
+        run: |
+          sudo xcode-select -s /Applications/Xcode_27.0.app/Contents/Developer
+          xcodebuild -version
+          xcrun --sdk iphoneos --show-sdk-build-version
+
+      - name: Install Nix
+        uses: DeterminateSystems/nix-installer-action@main
+        with:
+          determinate: false
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Download Open Grind
+        run: |
+          git clone --recurse-submodules git.opengrind.org/open-grind/open-grind.git
+
+      - name: Build IPA
+        working-directory: open-grind
+        run: bun run package:ios
+
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: Open-Grind-iOS
+          path: open-grind/src-tauri/target/release/artifacts/*.ipa
+          if-no-files-found: error
