@@ -52,6 +52,15 @@ jobs:
           print("Google login persistence modified")
           PY
 
+      - name: Commit Google Login Changes
+        working-directory: open-grind
+        run: |
+          git config user.name "Local Builder"
+          git config user.email "builder@example.com"
+          git add src-tauri/src/api/google_oauth/web.rs
+          git commit -m "Preserve Google login session on iOS"
+          git status --short
+
       - name: Build IPA
         working-directory: open-grind
         run: bun run package:ios
